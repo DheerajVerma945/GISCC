@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { axiosInstance } from './axios';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { axiosInstance } from "./axios";
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -9,7 +9,7 @@ const Blogs = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await axiosInstance.get('/admin/blogs');
+        const res = await axiosInstance.get("/admin/blogs");
         setBlogs(res.data);
       } catch (err) {
         console.error(err);
@@ -49,7 +49,7 @@ const Blogs = () => {
                   <article className="h-full flex flex-col">
                     <div className="relative aspect-video overflow-hidden rounded-t-xl">
                       <img
-                        src={blog.image}
+                        src={blog.imageUrl}
                         alt={blog.title}
                         className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                         loading="lazy"
@@ -60,21 +60,23 @@ const Blogs = () => {
                         {blog.title}
                       </h3>
                       <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                        {blog.description}
+                        {blog.description.length > 20
+                          ? blog.description.slice(0, 20) + "..."
+                          : blog.description}
                       </p>
                       <div className="mt-auto flex items-center text-blue-600 group-hover:text-blue-700 transition-colors">
                         <span className="font-medium">Read More</span>
-                        <svg 
+                        <svg
                           className="w-4 h-4 ml-2"
-                          fill="none" 
-                          stroke="currentColor" 
+                          fill="none"
+                          stroke="currentColor"
                           viewBox="0 0 24 24"
                         >
-                          <path 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth={2} 
-                            d="M17 8l4 4m0 0l-4 4m4-4H3" 
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M17 8l4 4m0 0l-4 4m4-4H3"
                           />
                         </svg>
                       </div>
