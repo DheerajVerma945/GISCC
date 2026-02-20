@@ -57,8 +57,9 @@ const Footer = () => {
               {[
                 { label: 'Home',          href: '/',         isRoute: true  },
                 { label: 'Our Services',  href: '/#services', isRoute: false },
+                { label: 'Events',        href: '/events',   isRoute: true  },
+                { label: 'Gallery',       href: '/gallery',  isRoute: true  },
                 { label: 'Latest Blogs',  href: '/blogs',    isRoute: true  },
-                { label: 'About Us',      href: '#about',    isRoute: false },
                 { label: 'Contact Us',    href: '#contact',  isRoute: false },
               ].map(link => (
                 <li key={link.label}>
