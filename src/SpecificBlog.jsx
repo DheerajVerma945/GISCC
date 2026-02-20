@@ -85,7 +85,7 @@ const SpecificBlog = () => {
     <div className="bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-900 to-blue-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-24 md:pt-44 md:pb-32">
           <div className="max-w-3xl mx-auto">
             <Link
               to="/blogs"
@@ -239,17 +239,18 @@ const SpecificBlog = () => {
           </div>
         </div>
         
-        <div className="mt-16 bg-gradient-to-r  rounded-2xl overflow-hidden">
+        <div className="mt-16 mb-16 bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl overflow-hidden shadow-xl">
           <div className="p-8 md:p-12 text-center">
-            <h3 className="text-2xl md:text-3xl font-bold mb-4">
+            <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white">
               Ready to build the future with us?
             </h3>
-            <p className=" max-w-xl mx-auto mb-8">
+            <p className="text-blue-100 max-w-xl mx-auto mb-8">
               Contact our team of experts to discuss your infrastructure project
             </p>
             <a 
               href="tel:+917837505862"
-              className="inline-flex items-center px-8 py-3  font-bold rounded-full  transition-all transform hover:scale-105 shadow-lg"
+              aria-label="Call Garvita Infrastructure"
+              className="inline-flex items-center px-8 py-3 bg-white text-blue-700 font-bold rounded-full hover:bg-blue-50 transition-all transform hover:scale-105 shadow-lg"
             >
               Get in Touch
               <ArrowLeft className="w-5 h-5 ml-2 rotate-180" />

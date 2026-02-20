@@ -1,14 +1,11 @@
 import React from 'react';
-import { MapPin, Phone, Mail, Linkedin, Twitter, ArrowRight, Code, Truck, Leaf, GlassWater, Construction, LucideProjector, Quote } from "lucide-react";
+import { ArrowRight, Building2, Truck, Leaf, GlassWater, Construction, LucideProjector, Quote } from "lucide-react";
 import Blogs from "./Blogs";
-import Header from './Header';
 import { Link } from 'react-router-dom';
 
 const HomePage = () => {
   return (
     <div className="font-sans antialiased text-gray-800">
-      {/* Header */}
-      <Header/>
 
       {/* Hero Section */}
       <section className="relative min-h-screen bg-gray-900 pt-32">
@@ -65,7 +62,7 @@ const HomePage = () => {
       </section>
 
       {/* Services Section */}
-      <section className="py-24 bg-gray-50">
+      <section id="services" className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -81,36 +78,42 @@ const HomePage = () => {
               { 
                 title: 'Urban Development', 
                 description: 'Designing sustainable urban spaces that balance growth with environmental responsibility.',
-                icon: <Code className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
+                icon: <Building2 className="w-7 h-7 text-blue-600" />,
+                bg: 'bg-blue-50'
               },
               { 
                 title: 'Transport Infrastructure', 
                 description: 'Building efficient transportation networks that connect communities and drive economic growth.',
-                icon: <Truck className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
+                icon: <Truck className="w-7 h-7 text-cyan-600" />,
+                bg: 'bg-cyan-50'
               },
               { 
                 title: 'Sustainable Construction', 
                 description: 'Implementing green building practices to minimize environmental impact.',
-                icon: <Leaf className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
+                icon: <Leaf className="w-7 h-7 text-green-600" />,
+                bg: 'bg-green-50'
               },
               { 
                 title: 'Water Management', 
                 description: 'Developing resilient water infrastructure for sustainable resource management.',
-                icon: <GlassWater className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
+                icon: <GlassWater className="w-7 h-7 text-sky-600" />,
+                bg: 'bg-sky-50'
               },
               { 
                 title: 'Structural Engineering', 
                 description: 'Creating innovative structural solutions that stand the test of time.',
-                icon: <Construction className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
+                icon: <Construction className="w-7 h-7 text-orange-600" />,
+                bg: 'bg-orange-50'
               },
               { 
                 title: 'Project Consulting', 
                 description: 'Providing expert guidance throughout the project lifecycle.',
-                icon: <LucideProjector className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
+                icon: <LucideProjector className="w-7 h-7 text-purple-600" />,
+                bg: 'bg-purple-50'
               }
             ].map((service, index) => (
-              <div key={index} className="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition-all duration-300">
-                <div className="mb-6">
+              <div key={index} className="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 group">
+                <div className={`${service.bg} w-14 h-14 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                   {service.icon}
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">{service.title}</h3>
@@ -136,9 +139,14 @@ const HomePage = () => {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div className="bg-gray-50 rounded-xl overflow-hidden shadow-lg">
-              <div className="h-80 bg-gradient-to-r from-blue-400 to-cyan-400 relative">
-                <div className="bg-gray-200 border-2 border-dashed rounded-xl w-full h-full" />
+            <div className="bg-gray-50 rounded-xl overflow-hidden shadow-lg group">
+              <div className="h-80 bg-gradient-to-br from-blue-500 to-cyan-400 relative overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&q=80"
+                  alt="Riverfront Redevelopment Project"
+                  className="w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4 bg-blue-600 text-white py-2 px-4 rounded-full text-sm font-medium">
                   Completed: 2023
                 </div>
@@ -149,9 +157,14 @@ const HomePage = () => {
               </div>
             </div>
             
-            <div className="bg-gray-50 rounded-xl overflow-hidden shadow-lg">
-              <div className="h-80 bg-gradient-to-r from-blue-400 to-cyan-400 relative">
-                <div className="bg-gray-200 border-2 border-dashed rounded-xl w-full h-full" />
+            <div className="bg-gray-50 rounded-xl overflow-hidden shadow-lg group">
+              <div className="h-80 bg-gradient-to-br from-blue-500 to-cyan-400 relative overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=800&q=80"
+                  alt="High-Speed Rail Corridor"
+                  className="w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4 bg-blue-600 text-white py-2 px-4 rounded-full text-sm font-medium">
                   In Progress
                 </div>
@@ -178,17 +191,23 @@ const HomePage = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((item) => (
-              <div key={item} className="bg-white/10 backdrop-blur-sm p-8 rounded-xl">
+            {[
+              { name: 'Rajesh Kumar', company: 'Metro Development Corp', text: 'Garvita Infrastructure delivered beyond our expectations. Their innovative approach to sustainable design helped us achieve LEED Platinum certification while staying on budget.' },
+              { name: 'Priya Sharma', company: 'National Highway Authority', text: 'Working with Garvita was a seamless experience. Their expertise in transport infrastructure and commitment to timelines was truly impressive.' },
+              { name: 'Amit Singh', company: 'Smart City Solutions', text: 'The team\'s dedication to quality and sustainability is unmatched. Our urban development project was completed with exceptional precision and care.' },
+            ].map((item, index) => (
+              <div key={index} className="bg-white/10 backdrop-blur-sm p-8 rounded-xl hover:bg-white/15 transition-colors">
                 <div className="flex items-center mb-6">
-                  <Quote className=" border-2 border-dashed rounded-xl w-16 h-16" />
+                  <div className="bg-blue-600 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Quote className="w-6 h-6 text-white" />
+                  </div>
                   <div className="ml-4">
-                    <h4 className="font-bold text-lg">Project Director</h4>
-                    <p className="text-blue-200">Major Development Corporation</p>
+                    <h4 className="font-bold text-lg">{item.name}</h4>
+                    <p className="text-blue-200 text-sm">{item.company}</p>
                   </div>
                 </div>
-                <p className="mb-6 italic">
-                  "Garvita Infrastructure delivered beyond our expectations. Their innovative approach to sustainable design helped us achieve LEED Platinum certification while staying on budget."
+                <p className="mb-6 italic text-gray-200 leading-relaxed">
+                  &ldquo;{item.text}&rdquo;
                 </p>
                 <div className="flex text-yellow-400">
                   {[...Array(5)].map((_, i) => (
