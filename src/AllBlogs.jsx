@@ -45,7 +45,7 @@ const AllBlogs = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-blue-900 to-blue-700 text-white py-20 md:py-28">
+      <div className="relative bg-gradient-to-r from-blue-900 to-blue-700 text-white pt-36 pb-20 md:pt-44 md:pb-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
             Our Insights & Stories
