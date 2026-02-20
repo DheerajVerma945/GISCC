@@ -1,43 +1,42 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useParams, Link } from "react-router-dom";
-import { axiosInstance } from "./axios";
-import { CalendarDays, ArrowLeft, Clock, Share2,  Copy, Check } from "lucide-react";
+import { useEffect, useState, useRef } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { CalendarDays, ArrowLeft, Clock, Share2, Copy, Check, Phone } from 'lucide-react';
+import { axiosInstance } from './axios';
+import useSEO from './useSEO';
 
 const SpecificBlog = () => {
   const { id } = useParams();
-  const [blog, setBlog] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [copied, setCopied] = useState(false);
+  const [blog, setBlog]               = useState(null);
+  const [loading, setLoading]         = useState(true);
+  const [copied, setCopied]           = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
-  const shareMenuRef = useRef(null);
-  const currentUrl = window.location.href;
+  const shareMenuRef  = useRef(null);
+  const currentUrl    = window.location.href;
+
+  useSEO({
+    title:       blog?.title,
+    description: blog?.description?.substring(0, 155),
+    image:       blog?.imageUrl,
+    url:         currentUrl,
+  });
 
   useEffect(() => {
-    const fetchBlog = async () => {
-      try {
-        setLoading(true);
-        const res = await axiosInstance.get(`/admin/blogs/${id}`);
-        setBlog(res.data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBlog();
+    setLoading(true);
+    axiosInstance.get(`/admin/blogs/${id}`)
+      .then(res => setBlog(res.data))
+      .catch(err => console.error(err))
+      .finally(() => setLoading(false));
   }, [id]);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (shareMenuRef.current && !shareMenuRef.current.contains(event.target)) {
+    const handleClickOutside = (e) => {
+      if (shareMenuRef.current && !shareMenuRef.current.contains(e.target)) {
         setShowShareMenu(false);
       }
     };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const copyToClipboard = () => {
@@ -48,219 +47,201 @@ const SpecificBlog = () => {
 
   const shareViaNative = () => {
     if (navigator.share) {
-      navigator.share({
-        title: blog.title,
-        text: blog.description.substring(0, 100) + "...",
-        url: currentUrl
-      }).catch(console.error);
+      navigator.share({ title: blog.title, text: blog.description.substring(0, 100) + '…', url: currentUrl }).catch(console.error);
     } else {
       copyToClipboard();
     }
   };
 
-  const shareViaEmail = () => {
-    window.location.href = `mailto:?subject=${encodeURIComponent(blog.title)}&body=${encodeURIComponent(currentUrl)}`;
-  };
-
-  const shareViaWhatsApp = () => {
-    window.open(`https://wa.me/?text=${encodeURIComponent(blog.title + "\n" + currentUrl)}`, '_blank');
-  };
-
-  const shareViaTwitter = () => {
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(blog.title)}&url=${encodeURIComponent(currentUrl)}`, '_blank');
-  };
+  const shareViaEmail     = () => { window.location.href = `mailto:?subject=${encodeURIComponent(blog.title)}&body=${encodeURIComponent(currentUrl)}`; };
+  const shareViaWhatsApp  = () => { window.open(`https://wa.me/?text=${encodeURIComponent(blog.title + '\n' + currentUrl)}`, '_blank'); };
+  const shareViaTwitter   = () => { window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(blog.title)}&url=${encodeURIComponent(currentUrl)}`, '_blank'); };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100">
-        <div className="flex flex-col items-center">
-          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading Article...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          <p className="text-gray-500 text-sm font-medium">Loading article…</p>
         </div>
       </div>
     );
   }
 
+  if (!blog) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 text-center px-4">
+        <h2 className="text-2xl font-bold text-gray-800 mb-3">Article not found</h2>
+        <Link to="/blogs" className="text-blue-600 hover:underline inline-flex items-center gap-1">
+          <ArrowLeft className="w-4 h-4" /> Back to Insights
+        </Link>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-900 to-blue-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-24 md:pt-44 md:pb-32">
-          <div className="max-w-3xl mx-auto">
-            <Link
-              to="/blogs"
-              className="inline-flex items-center text-blue-200 hover:text-white transition-colors mb-8 group"
-            >
-              <ArrowLeft className="w-5 h-5 mr-2 transition-transform group-hover:-translate-x-1" />
-              Back to Insights
-            </Link>
-            
-            <div className="flex flex-wrap gap-4 mb-6">
-              <div className="bg-blue-800 bg-opacity-40 px-4 py-1.5 rounded-full text-sm flex items-center">
-                <CalendarDays className="w-4 h-4 mr-2" />
-                <span>
-                  {new Date(blog.createdAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </span>
-              </div>
-              <div className="bg-blue-800 bg-opacity-40 px-4 py-1.5 rounded-full text-sm flex items-center">
-                <Clock className="w-4 h-4 mr-2" />
-                <span>{blog.readTime || 5} min read</span>
-              </div>
+    <div className="bg-gray-50 min-h-screen">
+
+      {/* Hero */}
+      <div className="bg-[#0a1628] text-white relative overflow-hidden">
+        <div
+          className="absolute inset-0 opacity-15 bg-cover bg-center"
+          style={{ backgroundImage: `url(${blog.imageUrl})` }}
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a1628]/70 to-[#0a1628]" aria-hidden="true" />
+
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 pt-36 pb-20 md:pt-44 md:pb-24">
+          <Link
+            to="/blogs"
+            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors mb-8 text-sm group"
+          >
+            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+            Back to Insights
+          </Link>
+
+          <div className="flex flex-wrap gap-3 mb-5">
+            <span className="inline-flex items-center gap-1.5 bg-white/10 border border-white/15 px-3.5 py-1.5 rounded-full text-xs backdrop-blur-sm">
+              <CalendarDays className="w-3.5 h-3.5" />
+              {new Date(blog.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+            </span>
+            <span className="inline-flex items-center gap-1.5 bg-white/10 border border-white/15 px-3.5 py-1.5 rounded-full text-xs backdrop-blur-sm">
+              <Clock className="w-3.5 h-3.5" />
+              {blog.readTime || 5} min read
+            </span>
+          </div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-3xl md:text-4xl lg:text-5xl font-poppins font-extrabold leading-tight mb-8"
+          >
+            {blog.title}
+          </motion.h1>
+
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-bold text-sm flex-shrink-0">
+              {blog.author?.charAt(0) || 'G'}
             </div>
-            
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 leading-tight">
-              {blog.title}
-            </h1>
-            
-            <div className="flex items-center mt-10">
-              <div className="bg-gradient-to-br from-blue-200 to-blue-300 rounded-xl w-12 h-12 flex items-center justify-center mr-4">
-                <span className="font-bold text-blue-800 text-lg">
-                  {blog.author?.charAt(0) || 'G'}
-                </span>
-              </div>
-              <div>
-                <p className="font-medium text-blue-100">{blog.author || 'Garvita Team'}</p>
-                <p className="text-blue-200 text-sm">Infrastructure Specialist</p>
-              </div>
+            <div>
+              <p className="font-semibold text-white text-sm">{blog.author || 'Garvita Team'}</p>
+              <p className="text-blue-300 text-xs">Infrastructure Specialist</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-10">
-        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-          <figure className="relative aspect-video">
+      {/* Article */}
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 -mt-10 relative z-10 pb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="bg-white rounded-2xl shadow-xl overflow-hidden"
+        >
+          {/* Featured Image */}
+          <figure className="aspect-video">
             <img
               src={blog.imageUrl}
               alt={blog.title}
               className="w-full h-full object-cover"
               loading="lazy"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent"></div>
           </figure>
-          
-          <div className="p-6 md:p-8 lg:p-12">
-            <div className="prose prose-lg max-w-none text-gray-700">
-              {blog.description.split("\n").map((paragraph, index) => (
-                <p key={index} className="mb-6 leading-relaxed text-gray-700">
-                  {paragraph}
-                </p>
+
+          {/* Body */}
+          <div className="p-6 md:p-10 lg:p-12">
+            <div className="prose prose-gray max-w-none text-gray-700 leading-relaxed text-[15px] md:text-base">
+              {blog.description.split('\n').map((paragraph, index) => (
+                <p key={index} className="mb-5">{paragraph}</p>
               ))}
             </div>
-            
-            <div className="mt-16 pt-8 border-t border-gray-200">
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center">
-                  <div className="bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl w-10 h-10 flex items-center justify-center mr-3">
-                    <span className="font-bold text-blue-800">
-                      {blog.author?.charAt(0) || 'G'}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">{blog.author || 'Garvita Team'}</p>
-                    <p className="text-gray-500 text-sm">Infrastructure Specialist</p>
-                  </div>
+
+            {/* Footer */}
+            <div className="mt-12 pt-8 border-t border-gray-100 flex items-center justify-between gap-4 flex-wrap">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-700 text-sm flex-shrink-0">
+                  {blog.author?.charAt(0) || 'G'}
                 </div>
-                
-                <div className="relative" ref={shareMenuRef}>
-                  <button 
-                    onClick={() => setShowShareMenu(!showShareMenu)}
-                    className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center text-white hover:from-blue-700 hover:to-blue-900 transition-all transform hover:scale-105 shadow-lg"
-                  >
-                    <Share2 className="w-5 h-5" />
-                  </button>
-                  
-                  {showShareMenu && (
-                    <div className="absolute right-0 bottom-full mb-3 w-64 bg-white rounded-xl shadow-2xl p-4 z-20 animate-fadeIn">
-                      <h4 className="font-bold text-gray-900 mb-3 flex items-center">
-                        <Share2 className="w-4 h-4 mr-2 text-blue-600" />
-                        Share this article
-                      </h4>
-                      
-                      <div className="grid grid-cols-2 gap-2">
-                        <button 
-                          onClick={shareViaNative}
-                          className="flex items-center justify-center p-3 bg-gray-100 rounded-lg hover:bg-blue-50 transition-colors"
+                <div>
+                  <p className="font-semibold text-gray-900 text-sm">{blog.author || 'Garvita Team'}</p>
+                  <p className="text-gray-400 text-xs">Infrastructure Specialist</p>
+                </div>
+              </div>
+
+              {/* Share */}
+              <div className="relative" ref={shareMenuRef}>
+                <button
+                  onClick={() => setShowShareMenu(!showShareMenu)}
+                  className="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center text-white transition-colors shadow-md"
+                  aria-label="Share article"
+                >
+                  <Share2 className="w-4 h-4" />
+                </button>
+
+                {showShareMenu && (
+                  <div className="absolute right-0 bottom-full mb-3 w-60 bg-white rounded-2xl shadow-2xl p-4 z-20 border border-gray-100">
+                    <h4 className="font-semibold text-gray-900 text-sm mb-3 flex items-center gap-2">
+                      <Share2 className="w-4 h-4 text-blue-600" />
+                      Share this article
+                    </h4>
+                    <div className="grid grid-cols-2 gap-2 mb-3">
+                      {[
+                        { label: 'Native',    fn: shareViaNative  },
+                        { label: 'Twitter',   fn: shareViaTwitter },
+                        { label: 'WhatsApp',  fn: shareViaWhatsApp},
+                        { label: 'Email',     fn: shareViaEmail   },
+                      ].map(({ label, fn }) => (
+                        <button
+                          key={label}
+                          onClick={fn}
+                          className="py-2.5 px-3 bg-gray-50 hover:bg-blue-50 rounded-xl text-sm font-medium text-gray-700 transition-colors"
                         >
-                          <span className="text-sm font-medium">Native</span>
+                          {label}
                         </button>
-                        
-                        <button 
-                          onClick={shareViaTwitter}
-                          className="flex items-center justify-center p-3 bg-gray-100 rounded-lg hover:bg-blue-50 transition-colors"
-                        >
-                          <span className="text-sm font-medium">Twitter</span>
-                        </button>
-                        
-                        <button 
-                          onClick={shareViaWhatsApp}
-                          className="flex items-center justify-center p-3 bg-gray-100 rounded-lg hover:bg-blue-50 transition-colors"
-                        >
-                          <span className="text-sm font-medium">WhatsApp</span>
-                        </button>
-                        
-                        <button 
-                          onClick={shareViaEmail}
-                          className="flex items-center justify-center p-3 bg-gray-100 rounded-lg hover:bg-blue-50 transition-colors"
-                        >
-                          <span className="text-sm font-medium">Email</span>
-                        </button>
-                      </div>
-                      
-                      <div className="mt-3 flex">
-                        <input
-                          type="text"
-                          value={currentUrl}
-                          readOnly
-                          className="flex-1 px-3 py-2 text-xs border border-gray-300 rounded-l-lg"
-                        />
-                        <button 
-                          onClick={copyToClipboard}
-                          className={`px-4 py-2 flex items-center text-xs font-medium rounded-r-lg ${
-                            copied 
-                              ? 'bg-green-500 text-white' 
-                              : 'bg-gray-800 text-white hover:bg-gray-900'
-                          }`}
-                        >
-                          {copied ? <Check className="w-4 h-4 mr-1" /> : <Copy className="w-4 h-4 mr-1" />}
-                          {copied ? 'Copied!' : 'Copy'}
-                        </button>
-                      </div>
+                      ))}
                     </div>
-                  )}
-                </div>
+                    <div className="flex rounded-xl overflow-hidden border border-gray-200">
+                      <input type="text" value={currentUrl} readOnly className="flex-1 px-3 py-2 text-xs text-gray-500 bg-gray-50 outline-none" />
+                      <button
+                        onClick={copyToClipboard}
+                        className={`px-3 py-2 text-xs font-medium flex items-center gap-1 transition-colors ${copied ? 'bg-green-500 text-white' : 'bg-gray-800 text-white hover:bg-gray-900'}`}
+                      >
+                        {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                        {copied ? 'Copied!' : 'Copy'}
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
-        </div>
-        
-        <div className="mt-16 mb-16 bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl overflow-hidden shadow-xl">
-          <div className="p-8 md:p-12 text-center">
-            <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white">
-              Ready to build the future with us?
-            </h3>
-            <p className="text-blue-100 max-w-xl mx-auto mb-8">
-              Contact our team of experts to discuss your infrastructure project
-            </p>
-            <a 
-              href="tel:+917837505862"
-              aria-label="Call Garvita Infrastructure"
-              className="inline-flex items-center px-8 py-3 bg-white text-blue-700 font-bold rounded-full hover:bg-blue-50 transition-all transform hover:scale-105 shadow-lg"
-            >
-              Get in Touch
-              <ArrowLeft className="w-5 h-5 ml-2 rotate-180" />
-            </a>
-          </div>
-        </div>
-      </div>
+        </motion.div>
 
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="mt-10 bg-gradient-to-r from-blue-700 to-blue-600 rounded-2xl p-8 md:p-10 text-center shadow-lg"
+        >
+          <h3 className="text-2xl font-poppins font-bold text-white mb-2">Ready to build the future with us?</h3>
+          <p className="text-blue-100 text-sm max-w-sm mx-auto mb-7">
+            Contact our team of experts to discuss your infrastructure project.
+          </p>
+          <a
+            href="tel:+917837505862"
+            className="inline-flex items-center gap-2 bg-white text-blue-700 hover:bg-blue-50 font-bold py-3 px-8 rounded-full transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
+          >
+            <Phone className="w-4 h-4" />
+            Get in Touch
+          </a>
+        </motion.div>
+      </div>
     </div>
   );
 };
 
 export default SpecificBlog;
+
