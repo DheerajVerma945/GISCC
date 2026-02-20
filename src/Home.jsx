@@ -18,7 +18,7 @@ const HomePage = () => {
         <div className="relative z-10 pt-40 pb-28 px-4 text-center">
           <div className="max-w-4xl mx-auto space-y-8">
             <div className="inline-flex items-center bg-blue-50 text-blue-700 px-4 py-2 rounded-full mb-6">
-              <span className="font-medium">Innovating since 2005</span>
+              <span className="font-medium">Innovating since 2020</span>
             </div>
             
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
