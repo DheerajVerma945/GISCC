@@ -15,7 +15,7 @@ const useSEO = ({ title, description, image, url }) => {
       let el = document.querySelector(selector);
       if (!el) {
         el = document.createElement('meta');
-        const [attrKey, attrVal] = selector.replace('meta[', '').replace(']', '').split('=');
+        const [attrKey, attrVal] = selector.replace('meta[', '').replace(/\]/g, '').split('=');
         el.setAttribute(attrKey, attrVal.replace(/"/g, ''));
         document.head.appendChild(el);
       }
