@@ -4,7 +4,7 @@ import { Plus, Trash2, X, Image as ImageIcon } from 'lucide-react';
 import { axiosInstance } from '../axios';
 import toast from 'react-hot-toast';
 
-const emptyForm = { image: '', title: '', category: '' };
+const emptyForm = { imageUrl: '', title: '', category: '' };
 
 const AdminGallery = () => {
   const [items, setItems]       = useState([]);
@@ -30,7 +30,7 @@ const AdminGallery = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.image.trim()) {
+    if (!form.imageUrl.trim()) {
       toast.error('Image URL is required');
       return;
     }
@@ -119,7 +119,7 @@ const AdminGallery = () => {
             <div key={item._id} className="group relative bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
               <div className="aspect-square overflow-hidden">
                 <img
-                  src={item.image}
+                  src={item.imageUrl}
                   alt={item.title || 'Gallery image'}
                   className="w-full h-full object-cover"
                   loading="lazy"
@@ -178,14 +178,14 @@ const AdminGallery = () => {
                   <input
                     type="url"
                     required
-                    value={form.image}
-                    onChange={(e) => setForm({ ...form, image: e.target.value })}
+                    value={form.imageUrl}
+                    onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
                     placeholder="https://example.com/image.jpg"
                     className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
-                  {form.image && (
+                  {form.imageUrl && (
                     <div className="mt-2 aspect-video rounded-xl overflow-hidden border border-gray-100">
-                      <img src={form.image} alt="Preview" className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; }} />
+                      <img src={form.imageUrl} alt="Preview" className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; }} />
                     </div>
                   )}
                 </div>

@@ -13,7 +13,7 @@ const EventDetail = () => {
   useSEO({
     title:       event?.title,
     description: event?.description?.substring(0, 155),
-    image:       event?.image,
+    image:       event?.imageUrl,
   });
 
   useEffect(() => {
@@ -51,10 +51,10 @@ const EventDetail = () => {
 
       {/* Hero */}
       <div className="bg-[#0a1628] text-white relative overflow-hidden">
-        {event.image && (
+        {event.imageUrl && (
           <div
             className="absolute inset-0 opacity-15 bg-cover bg-center"
-            style={{ backgroundImage: `url(${event.image})` }}
+            style={{ backgroundImage: `url(${event.imageUrl})` }}
             aria-hidden="true"
           />
         )}
@@ -107,10 +107,10 @@ const EventDetail = () => {
           transition={{ duration: 0.6, delay: 0.15 }}
           className="bg-white rounded-2xl shadow-xl overflow-hidden"
         >
-          {event.image && (
+          {event.imageUrl && (
             <figure className="aspect-video">
               <img
-                src={event.image}
+                src={event.imageUrl}
                 alt={event.title}
                 className="w-full h-full object-cover"
                 loading="lazy"
