@@ -17,7 +17,7 @@ const SpecificBlog = () => {
   useSEO({
     title:       blog?.title,
     description: blog?.description?.substring(0, 155),
-    image:       blog?.imageUrl,
+    image:       blog?.image,
     url:         currentUrl,
   });
 
@@ -84,11 +84,13 @@ const SpecificBlog = () => {
 
       {/* Hero */}
       <div className="bg-[#0a1628] text-white relative overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-15 bg-cover bg-center"
-          style={{ backgroundImage: `url(${blog.imageUrl})` }}
-          aria-hidden="true"
-        />
+        {blog.image && (
+          <div
+            className="absolute inset-0 opacity-15 bg-cover bg-center"
+            style={{ backgroundImage: `url(${blog.image})` }}
+            aria-hidden="true"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a1628]/70 to-[#0a1628]" aria-hidden="true" />
 
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 pt-36 pb-20 md:pt-44 md:pb-24">
@@ -141,14 +143,22 @@ const SpecificBlog = () => {
           className="bg-white rounded-2xl shadow-xl overflow-hidden"
         >
           {/* Featured Image */}
-          <figure className="aspect-video">
-            <img
-              src={blog.imageUrl}
-              alt={blog.title}
-              className="w-full h-full object-cover"
-              loading="lazy"
-            />
-          </figure>
+          {blog.image ? (
+            <figure className="aspect-video">
+              <img
+                src={blog.image}
+                alt={blog.title}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </figure>
+          ) : (
+            <div className="aspect-video bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center">
+              <svg className="w-20 h-20 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+            </div>
+          )}
 
           {/* Body */}
           <div className="p-6 md:p-10 lg:p-12">

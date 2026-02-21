@@ -4,7 +4,7 @@ import { Plus, Pencil, Trash2, X, CalendarDays, MapPin, Check } from 'lucide-rea
 import { axiosInstance } from '../axios';
 import toast from 'react-hot-toast';
 
-const emptyForm = { title: '', description: '', date: '', venue: '', image: '', isActive: false };
+const emptyForm = { title: '', description: '', date: '', venue: '', imageUrl: '', isActive: false };
 
 const AdminEvents = () => {
   const [events, setEvents]     = useState([]);
@@ -39,7 +39,7 @@ const AdminEvents = () => {
       description: event.description || '',
       date:        event.date ? event.date.substring(0, 10) : '',
       venue:       event.venue       || '',
-      image:       event.image       || '',
+      imageUrl:    event.imageUrl    || '',
       isActive:    event.isActive    || false,
     });
     setShowModal(true);
@@ -123,9 +123,9 @@ const AdminEvents = () => {
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
           {events.map((event) => (
             <div key={event._id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-              {event.image ? (
+              {event.imageUrl ? (
                 <div className="aspect-video overflow-hidden">
-                  <img src={event.image} alt={event.title} className="w-full h-full object-cover" loading="lazy" />
+                  <img src={event.imageUrl} alt={event.title} className="w-full h-full object-cover" loading="lazy" />
                 </div>
               ) : (
                 <div className="aspect-video bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center">
@@ -259,8 +259,8 @@ const AdminEvents = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
                   <input
                     type="url"
-                    value={form.image}
-                    onChange={(e) => setForm({ ...form, image: e.target.value })}
+                    value={form.imageUrl}
+                    onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
                     placeholder="https://example.com/image.jpg (optional)"
                     className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />

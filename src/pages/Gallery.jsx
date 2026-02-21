@@ -147,7 +147,7 @@ const Gallery = () => {
                 <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-shadow duration-300">
                   <div className="relative aspect-square overflow-hidden">
                     <img
-                      src={item.image}
+                      src={item.imageUrl}
                       alt={item.title || 'Gallery image'}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
@@ -198,7 +198,7 @@ const Gallery = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <img
-              src={lightbox.image}
+              src={lightbox.imageUrl}
               alt={lightbox.title || 'Gallery image'}
               className="w-full max-h-[80vh] object-contain rounded-xl"
             />

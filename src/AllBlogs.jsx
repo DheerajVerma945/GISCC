@@ -162,15 +162,23 @@ const AllBlogs = () => {
                 <motion.div key={blog._id} variants={fadeUp} custom={i}>
                   <Link to={`/blogs/${blog._id}`} className="group block h-full">
                     <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
-                      <div className="relative aspect-video overflow-hidden">
-                        <img
-                          src={blog.imageUrl}
-                          alt={blog.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                      </div>
+                      {blog.image ? (
+                        <div className="relative aspect-video overflow-hidden">
+                          <img
+                            src={blog.image}
+                            alt={blog.title}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                        </div>
+                      ) : (
+                        <div className="relative aspect-video bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center">
+                          <svg className="w-16 h-16 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                          </svg>
+                        </div>
+                      )}
                       <div className="p-5 flex-1 flex flex-col">
                         <div className="flex items-center text-xs text-gray-400 mb-3 gap-2">
                           <span>{new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
